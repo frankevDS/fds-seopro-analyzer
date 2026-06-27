@@ -94,6 +94,36 @@ Respond ONLY with a single valid JSON object matching this exact schema (no mark
 {schema}"""
 
 
+def call_groq(api_key, prompt, attempt=1):
+    """Call Groq with browser-like headers to avoid Cloudflare bot detection (error 1010)."""
+    groq_body = json.dumps({
+        "model": MODEL,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.4,
+        "max_tokens": 4000,
+        "response_format": {"type": "json_object"},
+    }).encode()
+
+    req = urllib.request.Request(
+        GROQ_URL,
+        data=groq_body,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+            # Cloudflare (which fronts Groq's API) sometimes blocks requests
+            # with no User-Agent or generic urllib defaults — error code 1010.
+            # A normal browser-style UA avoids that classification.
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                          "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
+
+    with urllib.request.urlopen(req, timeout=55) as resp:
+        return json.loads(resp.read().decode())
+
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
@@ -119,27 +149,22 @@ class handler(BaseHTTPRequestHandler):
 
         prompt = build_prompt(url, ps_desktop, ps_mobile)
 
-        groq_body = json.dumps({
-            "model": MODEL,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0.4,
-            "max_tokens": 4000,
-            "response_format": {"type": "json_object"},
-        }).encode()
-
-        req = urllib.request.Request(
-            GROQ_URL,
-            data=groq_body,
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {api_key}",
-            },
-            method="POST",
-        )
-
         try:
-            with urllib.request.urlopen(req, timeout=55) as resp:
-                result = json.loads(resp.read().decode())
+            result = None
+            last_err = None
+            # Retry once on transient Cloudflare/network blocks
+            for attempt in (1, 2):
+                try:
+                    result = call_groq(api_key, prompt, attempt)
+                    break
+                except urllib.error.HTTPError as e:
+                    last_err = e
+                    if e.code in (403, 429, 503) and attempt == 1:
+                        continue
+                    raise
+            if result is None and last_err:
+                raise last_err
+
             text = result["choices"][0]["message"]["content"]
             match = re.search(r"\{[\s\S]*\}", text)
             if not match:
@@ -153,7 +178,14 @@ class handler(BaseHTTPRequestHandler):
             })
         except urllib.error.HTTPError as e:
             err_body = e.read().decode() if e.fp else str(e)
-            self._send_json(e.code, {"error": f"Groq API error {e.code}: {err_body[:300]}"})
+            hint = ""
+            if e.code == 403:
+                hint = (
+                    " — this usually means the API key is invalid/expired, or "
+                    "Groq's account region/billing check rejected the request. "
+                    "Double check the key at console.groq.com/keys."
+                )
+            self._send_json(e.code, {"error": f"Groq API error {e.code}: {err_body[:300]}{hint}"})
         except json.JSONDecodeError as e:
             self._send_json(500, {"error": f"JSON parse error: {str(e)}"})
         except Exception as e:
