@@ -1,0 +1,2 @@
+# No external dependencies needed — uses Python's built-in
+# http.server and urllib modules only, for fastest cold starts.

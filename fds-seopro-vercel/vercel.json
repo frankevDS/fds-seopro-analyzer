@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/analyze.py": {
+      "maxDuration": 60
+    },
+    "api/pagespeed.py": {
+      "maxDuration": 30
+    }
+  }
+}

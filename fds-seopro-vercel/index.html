@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#185FA5"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="FDS SeoPro"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="description" content="FDS SeoPro Analyzer — Premium AI-powered SEO audit tool, powered by Groq AI"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+<title>FDS SeoPro Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d12;--bg2:#10141c;--bg3:#151b27;--bg4:#1c2335;
+  --bdr:#ffffff12;--bdr2:#ffffff20;
+  --tx:#f0f2f7;--tx2:#8b94a8;--tx3:#515c72;
+  --acc:#3b82f6;--acc2:#1d4ed8;
+  --grn:#10b981;--amb:#f59e0b;--red:#ef4444;--org:#f97316;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;overflow-x:hidden}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+
+#setup{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center}
+#setup .logo{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;justify-content:center}
+#setup .lm{width:44px;height:44px;background:var(--acc);border-radius:11px;display:flex;align-items:center;justify-content:center}
+#setup .lm i{font-size:24px;color:#fff}
+#setup .sub{font-size:13px;color:var(--tx2);margin-bottom:1.75rem;max-width:340px;line-height:1.6}
+.setup-card{background:var(--bg3);border:1px solid var(--bdr2);border-radius:16px;padding:1.5rem;width:100%;max-width:420px;text-align:left;margin-bottom:1rem}
+.setup-card h3{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.setup-card h3 i{color:var(--acc)}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--tx2);margin-bottom:5px}
+.field input{width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:9px;padding:11px 13px;font-size:13px;color:var(--tx);font-family:'Outfit',sans-serif;outline:none}
+.field input:focus{border-color:var(--acc)}
+.field input::placeholder{color:var(--tx3)}
+.save-btn{width:100%;background:var(--acc);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn:hover{background:var(--acc2)}
+.setup-note{font-size:12px;color:var(--tx3);text-align:center;max-width:380px;line-height:1.7}
+.setup-note a{color:var(--acc);text-decoration:none}
+.skip-btn{background:none;border:none;color:var(--tx3);font-size:12px;margin-top:10px;cursor:pointer;text-decoration:underline}
+
+#app{display:none;min-height:100vh}
+.header{padding:18px 20px 0;display:flex;align-items:center;gap:10px}
+.logo-m{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-m i{font-size:18px;color:#fff}
+.logo-n{font-family:'DM Serif Display',serif;font-size:19px;letter-spacing:-.3px}
+.logo-n .f{color:#60a5fa}.logo-n .p{color:var(--amb)}
+.mode-pil{margin-left:auto;font-size:11px;background:var(--bg4);border:1px solid var(--bdr2);color:var(--tx2);padding:3px 10px;border-radius:20px;font-family:'DM Mono',monospace}
+.settings-btn{background:none;border:none;color:var(--tx3);font-size:20px;cursor:pointer;padding:4px}
+
+.hero{text-align:center;padding:32px 20px 22px}
+.htag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--acc);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:3px 12px;margin-bottom:14px;font-family:'DM Mono',monospace}
+.hero h1{font-family:'DM Serif Display',serif;font-size:30px;line-height:1.1;margin-bottom:10px;letter-spacing:-.7px}
+.hero h1 em{color:#60a5fa;font-style:italic}
+.hero p{font-size:13px;color:var(--tx2);max-width:380px;margin:0 auto 22px;font-weight:300}
+
+.sbox{margin:0 16px;display:flex;gap:0;background:var(--bg3);border:1px solid var(--bdr2);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.sbox:focus-within{border-color:var(--acc)}
+.sbox input{flex:1;background:transparent;border:none;outline:none;padding:14px 16px;font-size:15px;color:var(--tx);font-family:'Outfit',sans-serif;min-width:0}
+.sbox input::placeholder{color:var(--tx3)}
+.abtn{background:var(--acc);border:none;color:#fff;padding:12px 20px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
+.abtn:hover{background:var(--acc2)}
+.abtn:disabled{background:var(--bg4);color:var(--tx3);cursor:not-allowed}
+
+.hints{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 16px 0;font-size:11px;color:var(--tx3)}
+.hints span{display:flex;align-items:center;gap:4px}
+
+.status{text-align:center;padding:10px 16px;font-size:13px;color:var(--tx2);min-height:40px;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+.status.err{color:var(--red)}
+
+.prog-wrap{margin:8px 16px}
+.prog{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px}
+.prog-item{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12px;color:var(--tx3)}
+.prog-item.done{color:var(--tx)}
+.prog-item.active{color:var(--acc);font-weight:500}
+.pdot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:600}
+.pdot.done{background:rgba(16,185,129,.2);color:#34d399}
+.pdot.active{background:rgba(59,130,246,.2);color:#60a5fa}
+.pdot.wait{background:var(--bdr2);color:var(--tx3)}
+
+.results{padding:0 16px 80px}
+
+.sbanner{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:20px 18px;display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.rw{position:relative;width:90px;height:90px;flex-shrink:0}
+.rw svg{transform:rotate(-90deg)}
+.rn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rn .b{font-family:'DM Serif Display',serif;font-size:28px;line-height:1}
+.rn .s{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:2px}
+.smeta h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.smeta p{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.gpill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:6px}
+
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mc{background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:11px 9px;text-align:center}
+.mcl{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.mcs{font-family:'DM Serif Display',serif;font-size:22px;line-height:1}
+.mcb{height:3px;background:var(--bdr2);border-radius:2px;margin-top:6px;overflow:hidden}
+.mcf{height:100%;border-radius:2px}
+
+.tabs{display:flex;gap:2px;background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:3px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tb{background:none;border:none;color:var(--tx3);padding:7px 11px;font-size:12px;font-weight:500;cursor:pointer;border-radius:8px;white-space:nowrap;display:flex;align-items:center;gap:4px;font-family:'Outfit',sans-serif;transition:all .12s;flex-shrink:0}
+.tb.on{background:var(--bg4);color:var(--tx);border:1px solid var(--bdr2)}
+.tb:hover:not(.on){color:var(--tx2)}
+.tp{display:none}.tp.on{display:block}
+
+.card{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:16px 15px;margin-bottom:10px}
+.ch{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ch i{font-size:17px;color:var(--acc)}
+.ch h4{font-size:13px;font-weight:600;flex:1}
+.mr{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.mr:last-child{border-bottom:none;padding-bottom:0}
+.ml{font-size:11px;color:var(--tx2);flex:0 0 155px;display:flex;align-items:center;gap:5px}
+.ml i{font-size:13px;color:var(--tx3)}
+.mv{font-size:11px;color:var(--tx);font-weight:500;flex-shrink:0}
+.mm{flex:1;min-width:50px}
+.mb{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.mf{height:100%;border-radius:3px;transition:width .7s ease}
+.mp{font-size:10px;text-align:right;margin-bottom:2px}
+
+.bdg{display:inline-flex;align-items:center;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;border:1px solid}
+.g{background:rgba(16,185,129,.15);color:#34d399;border-color:rgba(16,185,129,.3)}
+.a{background:rgba(245,158,11,.15);color:#fbbf24;border-color:rgba(245,158,11,.3)}
+.r{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}
+.b{background:rgba(59,130,246,.15);color:#60a5fa;border-color:rgba(59,130,246,.3)}
+
+.si{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr);align-items:flex-start}
+.si:last-child{border-bottom:none}
+.sd{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.hi{background:rgba(239,68,68,.15);color:#f87171}.md{background:rgba(245,158,11,.15);color:#fbbf24}.lo{background:rgba(16,185,129,.15);color:#34d399}
+.st{font-size:12px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sd2{font-size:12px;color:var(--tx2);line-height:1.5}
+.ssteps{padding-left:14px;margin-top:5px}
+.ssteps li{font-size:11px;color:var(--tx3);line-height:1.85;font-family:'DM Mono',monospace}
+
+.aib{background:var(--bg4);border-left:3px solid var(--acc);border-radius:0 9px 9px 0;padding:10px 12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-top:9px}
+
+.kww{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.kwt{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
+.kwt th{text-align:left;font-size:10px;color:var(--tx3);padding:6px 7px;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:.3px}
+.kwt td{padding:7px 7px;border-bottom:1px solid var(--bdr)}
+.kwt tr:last-child td{border-bottom:none}
+
+.blr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:11px}
+.blr:last-child{border-bottom:none}
+.bld{color:var(--acc);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'DM Mono',monospace}
+
+.ext-r{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr);align-items:flex-start}
+.ext-r:last-child{border-bottom:none}
+
+.pl{text-align:center;padding:3rem 1.5rem}
+.pl i{font-size:52px;color:var(--bdr2);display:block;margin-bottom:1rem}
+.pl h3{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+.pl p{font-size:13px;color:var(--tx2);max-width:340px;margin:0 auto;line-height:1.6}
+
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--bdr2);border-top-color:var(--acc);border-radius:50%;animation:rot .7s linear infinite;vertical-align:middle}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:10px 13px;font-size:12px;color:#fbbf24;display:flex;gap:8px;align-items:flex-start;margin-bottom:12px}
+.warn i{flex-shrink:0;font-size:15px;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div id="setup">
+  <div class="logo">
+    <div class="lm"><i class="ti ti-chart-arrows-vertical"></i></div>
+    <span style="font-family:'DM Serif Display',serif;font-size:24px"><span style="color:#60a5fa">FDS</span> Seo<span style="color:#f59e0b">Pro</span></span>
+  </div>
+  <div class="sub">Powered by Groq AI (free & fast). Paste your free Groq API key below — it's stored only in your browser and sent securely to this app's own backend.</div>
+  <div class="setup-card">
+    <h3><i class="ti ti-key"></i> Groq API Key</h3>
+    <div class="field">
+      <label>Your free key from console.groq.com/keys</label>
+      <input type="password" id="apiKeyInput" placeholder="gsk_..." autocomplete="off"/>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveConfig()"><i class="ti ti-check"></i> Save & Start Analyzing</button>
+  <button class="skip-btn" onclick="skipConfig()">Skip — server already has a key configured</button>
+  <div class="setup-note" style="margin-top:16px">
+    No key yet? Get one free in 30 seconds at <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a>
+  </div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div class="logo-m"><i class="ti ti-chart-arrows-vertical"></i></div>
+    <span class="logo-n"><span class="f">FDS</span> Seo<span class="p">Pro</span> <span style="font-weight:300;color:var(--tx2);font-size:15px">Analyzer</span></span>
+    <div class="mode-pil" id="modePil">Groq AI</div>
+    <button class="settings-btn" onclick="triggerInstall()" title="Install App"><i class="ti ti-download"></i></button>
+    <button class="settings-btn" onclick="showSetup()" title="Settings"><i class="ti ti-settings"></i></button>
+  </div>
+
+  <div class="hero">
+    <div class="htag"><i class="ti ti-sparkles"></i> Premium SEO Intelligence</div>
+    <h1>See Your Site <em>Exactly</em><br>As Google Sees It</h1>
+    <p>Groq AI analysis · 60+ signals · Core Web Vitals · Backlinks · Competitors · Step-by-step fixes</p>
+  </div>
+
+  <div class="sbox">
+    <input type="url" id="urlIn" placeholder="https://yourwebsite.com" autocomplete="url" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+    <button class="abtn" id="goBtn" onclick="run()"><i class="ti ti-search"></i> Analyze</button>
+  </div>
+  <div class="hints">
+    <span><i class="ti ti-brain"></i> Groq Llama 3.3 70B</span>
+    <span><i class="ti ti-bolt"></i> Google PageSpeed</span>
+    <span><i class="ti ti-shield-check"></i> 60+ signals</span>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div id="progWrap" style="display:none" class="prog-wrap">
+    <div class="prog">
+      <div class="prog-item" id="p1"><div class="pdot wait" id="pd1">1</div> Fetching Google PageSpeed data</div>
+      <div class="prog-item" id="p2"><div class="pdot wait" id="pd2">2</div> Groq AI analyzing your site</div>
+      <div class="prog-item" id="p3"><div class="pdot wait" id="pd3">3</div> Checking title, meta & headings</div>
+      <div class="prog-item" id="p4"><div class="pdot wait" id="pd4">4</div> Evaluating technical SEO signals</div>
+      <div class="prog-item" id="p5"><div class="pdot wait" id="pd5">5</div> Researching keywords & backlinks</div>
+      <div class="prog-item" id="p6"><div class="pdot wait" id="pd6">6</div> Identifying competitors & strategy</div>
+      <div class="prog-item" id="p7"><div class="pdot wait" id="pd7">7</div> Building your priority fix list</div>
+    </div>
+  </div>
+
+  <div class="results" id="resultsWrap" style="display:none">
+    <div id="modeBanner"></div>
+    <div class="sbanner">
+      <div class="rw">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
+          <circle id="ringC" cx="45" cy="45" r="38" fill="none" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76" style="transition:stroke-dashoffset 1s ease,stroke .4s"/>
+        </svg>
+        <div class="rn"><span class="b" id="ringN">—</span><span class="s">/ 100</span></div>
+      </div>
+      <div class="smeta">
+        <h3 id="scoreTitle">FDS SeoPro Analysis</h3>
+        <p id="scoreSummary"></p>
+        <div id="scoreGrade"></div>
+      </div>
+    </div>
+    <div class="mg" id="miniGrid"></div>
+    <div class="tabs">
+      <button class="tb on" onclick="swTab(this,'onpage')"><i class="ti ti-file-text"></i> On-Page</button>
+      <button class="tb" onclick="swTab(this,'technical')"><i class="ti ti-cpu"></i> Technical</button>
+      <button class="tb" onclick="swTab(this,'content')"><i class="ti ti-align-left"></i> Content</button>
+      <button class="tb" onclick="swTab(this,'keywords')"><i class="ti ti-tags"></i> Keywords</button>
+      <button class="tb" onclick="swTab(this,'backlinks')"><i class="ti ti-link"></i> Backlinks</button>
+      <button class="tb" onclick="swTab(this,'competitor')"><i class="ti ti-tournament"></i> Competitor</button>
+      <button class="tb" onclick="swTab(this,'fixes')"><i class="ti ti-list-check"></i> Fixes</button>
+    </div>
+    <div id="tp-onpage" class="tp on"></div>
+    <div id="tp-technical" class="tp"></div>
+    <div id="tp-content" class="tp"></div>
+    <div id="tp-keywords" class="tp"></div>
+    <div id="tp-backlinks" class="tp"></div>
+    <div id="tp-competitor" class="tp"></div>
+    <div id="tp-fixes" class="tp"></div>
+  </div>
+
+  <div id="placeholder" class="pl">
+    <i class="ti ti-world-search"></i>
+    <h3>FDS SeoPro Analyzer</h3>
+    <p>Enter any URL above to get a full premium SEO audit powered by Groq AI and Google PageSpeed.</p>
+  </div>
+</div>
+
+<script>
+let API_KEY = localStorage.getItem('fds_groq_key') || '';
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+function triggerInstall(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt = null; });
+  } else if(/iphone|ipad|ipod/i.test(navigator.userAgent)){
+    alert('To install on iPhone/iPad:\n1. Tap the Share button\n2. Tap "Add to Home Screen"\n3. Tap "Add"');
+  } else {
+    alert('Look for the install icon in your browser\'s address bar, or use the browser menu → "Install app" / "Add to Home Screen".');
+  }
+}
+
+function saveConfig(){
+  API_KEY = document.getElementById('apiKeyInput').value.trim();
+  if(!API_KEY){ alert('Please enter your Groq API key, or tap "Skip" if the server already has one configured.'); return; }
+  localStorage.setItem('fds_groq_key', API_KEY);
+  enterApp();
+}
+function skipConfig(){ enterApp(); }
+function enterApp(){
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+function showSetup(){
+  document.getElementById('apiKeyInput').value = API_KEY;
+  document.getElementById('setup').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+if(localStorage.getItem('fds_visited')){
+  enterApp();
+}
+localStorage.setItem('fds_visited', '1');
+
+function col(s){return s>=80?'#10b981':s>=60?'#f59e0b':s>=40?'#f97316':'#ef4444'}
+function bdg(s){return s>=80?'<span class="bdg g">Good</span>':s>=60?'<span class="bdg a">Needs Work</span>':s>=40?'<span class="bdg a">Poor</span>':'<span class="bdg r">Critical</span>'}
+function ib(v,map){return`<span class="bdg ${(map||{})[v]||'b'}">${v}</span>`}
+function meter(v){const p=Math.min(100,Math.max(0,Math.round(+v||0)));const c=col(p);return`<div class="mm"><div class="mp" style="color:${c}">${p}%</div><div class="mb"><div class="mf" style="width:${p}%;background:${c}"></div></div></div>`}
+function swTab(btn,name){document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));btn.classList.add('on');document.getElementById('tp-'+name).classList.add('on')}
+function setStatus(h,cls=''){const el=document.getElementById('status');el.innerHTML=h;el.className='status'+(cls?' '+cls:'')}
+function host(url){try{return new URL(url).hostname}catch(e){return url}}
+function setStep(n){
+  for(let i=1;i<=7;i++){
+    const pi=document.getElementById('p'+i),pd=document.getElementById('pd'+i);
+    if(i<n){pi.className='prog-item done';pd.className='pdot done';pd.innerHTML='<i class="ti ti-check" style="font-size:10px"></i>'}
+    else if(i===n){pi.className='prog-item active';pd.className='pdot active';pd.innerHTML='<span class="spin"></span>'}
+    else{pi.className='prog-item';pd.className='pdot wait';pd.innerHTML=i}
+  }
+}
+
+// Same-origin calls — no CORS issues since frontend and API share the domain
+async function fetchPS(url, strategy){
+  try{
+    const r = await fetch(`/api/pagespeed?url=${encodeURIComponent(url)}&strategy=${strategy}`);
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(d.error) return null;
+    return d;
+  }catch(e){ return null; }
+}
+
+async function fetchAnalysis(url, psDesktop, psMobile){
+  const headers = {'Content-Type': 'application/json'};
+  if(API_KEY) headers['X-API-Key'] = API_KEY;
+  const r = await fetch('/api/analyze', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ url, psDesktop, psMobile })
+  });
+  const d = await r.json();
+  if(!r.ok || d.error) throw new Error(d.error || 'Analysis failed');
+  return d;
+}
+
+let lastUrl = '';
+
+async function run(){
+  let url = document.getElementById('urlIn').value.trim();
+  if(!url) return;
+  if(!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  document.getElementById('urlIn').value = url;
+  lastUrl = url;
+
+  const btn = document.getElementById('goBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Analyzing…';
+  document.getElementById('placeholder').style.display='none';
+  document.getElementById('resultsWrap').style.display='none';
+  document.getElementById('progWrap').style.display='block';
+  setStatus('');
+
+  try{
+    setStep(1);
+    const [psD, psM] = await Promise.all([fetchPS(url,'desktop'), fetchPS(url,'mobile')]);
+    const hasPS = psD !== null;
+
+    setStep(2);
+    let stepN = 2;
+    const si = setInterval(()=>{ stepN = Math.min(stepN+1, 6); setStep(stepN); }, 2500);
+
+    const result = await fetchAnalysis(url, psD, psM);
+    clearInterval(si);
+
+    setStep(7);
+    const ai = result.data;
+    document.getElementById('modePil').innerHTML = hasPS
+      ? '<span style="color:#34d399">✓ PageSpeed + Groq AI</span>'
+      : '<span style="color:#fbbf24">⚡ Groq AI Mode</span>';
+
+    for(let i=1;i<=7;i++){
+      document.getElementById('p'+i).className='prog-item done';
+      const pd=document.getElementById('pd'+i);
+      pd.className='pdot done';
+      pd.innerHTML='<i class="ti ti-check" style="font-size:10px"></i>';
+    }
+
+    setTimeout(()=>{
+      document.getElementById('progWrap').style.display='none';
+      document.getElementById('resultsWrap').style.display='block';
+      render(url, ai, hasPS);
+      setStatus('<i class="ti ti-circle-check" style="color:#10b981"></i> Analysis complete · '+new Date().toLocaleTimeString());
+    }, 500);
+
+  }catch(e){
+    document.getElementById('progWrap').style.display='none';
+    setStatus('<i class="ti ti-alert-circle"></i> '+e.message, 'err');
+    document.getElementById('placeholder').style.display='block';
+  }
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-search"></i> Analyze';
+}
+
+function render(url, ai, hasPS){
+  const s = ai.scores||{};
+  const scores = [s.onPage||50,s.technical||50,s.content||50,s.ux||50,s.mobile||50,s.security||50];
+  const overall = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  const circ = 238.76;
+  document.getElementById('ringC').style.strokeDashoffset = circ-(overall/100)*circ;
+  document.getElementById('ringC').style.stroke = col(overall);
+  document.getElementById('ringN').textContent = overall;
+  document.getElementById('scoreTitle').textContent = 'SEO Score — '+host(url);
+  document.getElementById('scoreSummary').textContent = ai.summary||'';
+  const g=overall>=80?'A':overall>=60?'B':overall>=40?'C':'D';
+  const gc={A:'#10b981',B:'#f59e0b',C:'#f97316',D:'#ef4444'}[g];
+  const gl={A:'Grade A — Strong',B:'Grade B — Average',C:'Grade C — Weak',D:'Grade D — Critical'};
+  document.getElementById('scoreGrade').innerHTML=`<span class="gpill" style="background:${gc}18;color:${gc};border:1px solid ${gc}55"><i class="ti ti-award"></i> ${gl[g]}</span>`;
+  document.getElementById('modeBanner').innerHTML = hasPS?'':
+    `<div class="warn"><i class="ti ti-info-circle"></i><div><strong>AI Mode</strong> — PageSpeed unavailable. Scores estimated by Groq AI. Retry in a few minutes for real Core Web Vitals.</div></div>`;
+
+  const mCards=[['On-Page',s.onPage||50,'ti-file-text'],['Technical',s.technical||50,'ti-cpu'],['Content',s.content||50,'ti-align-left'],['UX',s.ux||50,'ti-device-desktop'],['Mobile',s.mobile||50,'ti-device-mobile'],['Security',s.security||50,'ti-shield-check']];
+  document.getElementById('miniGrid').innerHTML=mCards.map(([l,v,i])=>`<div class="mc"><div style="font-size:15px;margin-bottom:2px"><i class="ti ${i}" style="color:${col(v)}"></i></div><div class="mcl">${l}</div><div class="mcs" style="color:${col(v)}">${v}</div><div class="mcb"><div class="mcf" style="width:${v}%;background:${col(v)}"></div></div></div>`).join('');
+
+  buildOnPage(url,ai);buildTechnical(ai);buildContent(ai);
+  buildKeywords(ai);buildBacklinks(ai);buildCompetitor(ai);buildFixes(ai);
+}
+
+function card(icon,title,badge,body){return`<div class="card"><div class="ch"><i class="ti ${icon}"></i><h4>${title}</h4>${badge||''}</div>${body}</div>`}
+function row(icon,label,right){return`<div class="mr"><div class="ml"><i class="ti ${icon}"></i>${label}</div>${right}</div>`}
+
+function buildOnPage(url,ai){
+  const t=ai.title||{},m=ai.meta||{},h=ai.headings||{};
+  document.getElementById('tp-onpage').innerHTML=
+    card('ti-cursor-text','SEO Title',bdg(t.score||50),`
+      ${row('ti-quote','Likely title',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:11px">${t.value||'—'}</div>`)}
+      ${row('ti-chart-bar','Score',meter(t.score||50))}
+      ${row('ti-ruler','Length',`<div class="mv">${t.length||'?'}</div>`)}
+      ${row('ti-tag','Keyword in title',`<div class="mv">${t.kwInTitle?'<span class="bdg g">Yes</span>':'<span class="bdg r">No</span>'}</div>`)}
+      <div class="aib">${t.comment||'—'}</div>
+      <div style="margin-top:9px;padding:9px 11px;background:var(--bg4);border:1px solid rgba(59,130,246,.3);border-radius:8px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved title</div>
+        <div style="font-size:12px;font-weight:600;color:#60a5fa">${t.improved||'—'}</div>
+      </div>`)+
+    card('ti-text-caption','Meta Description',bdg(m.score||50),`
+      ${row('ti-quote','Likely meta',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:11px">${m.value||'—'}</div>`)}
+      ${row('ti-chart-bar','Score',meter(m.score||50))}
+      ${row('ti-ruler','Length',`<div class="mv">${m.length||'?'}</div>`)}
+      ${row('ti-tag','Keyword in meta',`<div class="mv">${m.kwInMeta?'<span class="bdg g">Yes</span>':'<span class="bdg r">No</span>'}</div>`)}
+      <div class="aib">${m.comment||'—'}</div>
+      <div style="margin-top:9px;padding:9px 11px;background:var(--bg4);border:1px solid rgba(59,130,246,.3);border-radius:8px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved meta</div>
+        <div style="font-size:12px;font-weight:600;color:#60a5fa">${m.improved||'—'}</div>
+      </div>`)+
+    card('ti-list','Headings H1–H6',bdg(h.score||50),`
+      ${row('ti-h-1','H1 likely',`<div class="mv" style="max-width:220px;font-size:11px">${h.h1Value||'—'}</div>`)}
+      ${row('ti-chart-bar','Score',meter(h.score||50))}
+      ${row('ti-sitemap','Structure',`<div class="mv" style="font-size:11px;max-width:220px">${h.structure||'—'}</div>`)}
+      ${(h.issues||[]).map(i=>row('ti-alert-triangle',`<span style="color:#f87171">Issue</span>`,`<div class="mv" style="font-size:11px;color:#f87171">${i}</div>`)).join('')}
+      ${(h.fixes||[]).map(f=>row('ti-circle-check',`<span style="color:#34d399">Fix</span>`,`<div class="mv" style="font-size:11px;color:#34d399">${f}</div>`)).join('')}`)+
+    card('ti-settings','Technical On-Page Tags','',`
+      ${row('ti-shield-lock','HTTPS',`<div class="mv">${url.startsWith('https')?'<span class="bdg g">Secure ✓</span>':'<span class="bdg r">Not secure ✗</span>'}</div>`)}
+      ${row('ti-robot','Robots.txt',`<div class="mv"><span class="bdg b">See technical tab</span></div>`)}
+      ${row('ti-code','Structured data',`<div class="mv"><span class="bdg b">See technical tab</span></div>`)}`);
+}
+
+function buildTechnical(ai){
+  const cwv=ai.cwv||{},iss=ai.technical||[];
+  document.getElementById('tp-technical').innerHTML=
+    card('ti-brand-speedtest','Core Web Vitals','',`
+      ${row('ti-photo','LCP',`${meter(cwv.perfScore||50)}<div class="mv"><span class="bdg b">${cwv.lcp||'Est.'}</span></div>`)}
+      ${row('ti-layout-distribute-vertical','CLS',`${meter(cwv.perfScore||50)}<div class="mv"><span class="bdg b">${cwv.cls||'Est.'}</span></div>`)}
+      ${row('ti-eye','FCP',`${meter(cwv.perfScore||50)}<div class="mv"><span class="bdg b">${cwv.fcp||'Est.'}</span></div>`)}
+      ${row('ti-server','TTFB',`${meter(cwv.perfScore||50)}<div class="mv"><span class="bdg b">${cwv.ttfb||'Est.'}</span></div>`)}
+      ${row('ti-chart-line','Performance score',meter(cwv.perfScore||50))}
+      ${row('ti-device-mobile','Mobile score',meter(cwv.mobileScore||50))}`)
+    +(iss.length?card('ti-alert-circle','Technical Issues Detected','',
+      iss.map(x=>`<div class="si"><div class="sd ${x.severity==='High'?'hi':x.severity==='Medium'?'md':'lo'}"><i class="ti ti-alert-triangle"></i></div>
+      <div><div class="st">${x.issue} ${ib(x.severity,{High:'r',Medium:'a',Low:'b'})}</div>
+      <div class="sd2"><strong>Impact:</strong> ${x.impact}</div>
+      <div class="sd2" style="margin-top:2px"><strong>Fix:</strong> ${x.fix}</div></div></div>`).join('')):'');
+}
+
+function buildContent(ai){
+  const c=ai.content||{},ri=ai.rankingIssues||[];
+  document.getElementById('tp-content').innerHTML=
+    card('ti-file-analytics','Content Quality & E-E-A-T',bdg(c.score||50),`
+      ${row('ti-chart-bar','Content score',meter(c.score||50))}
+      ${row('ti-alphabet-latin','Word count',`<div class="mv" style="font-family:'DM Mono',monospace">${(c.words||0).toLocaleString()} words</div>`)}
+      ${row('ti-book','Readability',meter(c.readability||60))}
+      ${row('ti-medal','E-E-A-T score',meter(c.eeat||50))}
+      ${row('ti-layers','Content depth',meter(c.depth||50))}
+      <div class="aib">${c.comment||'—'}</div>
+      ${(c.gaps||[]).length?`<div style="margin-top:9px"><div style="font-size:10px;color:var(--tx3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px">Content gaps to fill</div>
+      ${(c.gaps||[]).map(g=>`<div style="display:flex;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--tx2)"><i class="ti ti-point-filled" style="color:#f59e0b;font-size:10px"></i>${g}</div>`).join('')}</div>`:''}`)+
+    (ri.length?card('ti-trending-down','Why Not Ranking Well','',
+      ri.map(r=>`<div class="si"><div class="sd ${r.impact==='High'?'hi':r.impact==='Medium'?'md':'lo'}"><i class="ti ti-x"></i></div>
+      <div><div class="st">${r.reason} ${ib(r.impact,{High:'r',Medium:'a',Low:'b'})}</div>
+      <div class="sd2" style="margin-bottom:2px"><span class="bdg b" style="font-size:10px">${r.signal||''}</span></div>
+      <div class="sd2"><strong>Fix:</strong> ${r.fix}</div></div></div>`).join('')):'');
+}
+
+function buildKeywords(ai){
+  const kws=ai.keywords||[],ext=ai.extLinks||[];
+  document.getElementById('tp-keywords').innerHTML=
+    card('ti-tags','Keyword Analysis','',kws.length?`<div class="kww"><table class="kwt">
+    <thead><tr><th>Keyword</th><th>Vol</th><th>Diff</th><th>Rel</th><th>T</th><th>M</th><th>H</th><th>Density</th><th>Verdict</th></tr></thead>
+    <tbody>${kws.map(k=>`<tr>
+      <td style="font-weight:600;font-family:'DM Mono',monospace">${k.kw}</td>
+      <td>${ib(k.volume,{High:'g',Medium:'a',Low:'r'})}</td>
+      <td>${ib(k.difficulty,{High:'r',Medium:'a',Low:'g'})}</td>
+      <td><div style="min-width:45px">${meter(k.relevance||50)}</div></td>
+      <td>${k.inTitle?'<i class="ti ti-check" style="color:#34d399"></i>':'<i class="ti ti-x" style="color:#f87171"></i>'}</td>
+      <td>${k.inMeta?'<i class="ti ti-check" style="color:#34d399"></i>':'<i class="ti ti-x" style="color:#f87171"></i>'}</td>
+      <td>${k.inH1?'<i class="ti ti-check" style="color:#34d399"></i>':'<i class="ti ti-x" style="color:#f87171"></i>'}</td>
+      <td style="font-family:'DM Mono',monospace">${k.density||'—'}</td>
+      <td>${ib(k.verdict,{Keep:'g',Improve:'a',Replace:'r'})}</td>
+    </tr><tr><td colspan="9" style="padding:2px 7px 8px;font-size:10px;color:var(--tx3);background:var(--bg4)">${k.reason}</td></tr>`).join('')}</tbody></table></div>`
+    :'<p style="font-size:12px;color:var(--tx2);text-align:center;padding:12px">No keywords found.</p>')+
+    card('ti-external-link','External Links to Acquire','',ext.map(l=>`<div class="ext-r">
+      <div style="width:28px;height:28px;background:var(--bg4);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-link" style="color:var(--acc);font-size:14px"></i></div>
+      <div style="flex:1"><div style="font-weight:600;font-size:11px;font-family:'DM Mono',monospace;color:var(--acc);margin-bottom:2px">${l.domain}</div>
+      <div style="display:flex;gap:4px;margin-bottom:3px"><span class="bdg b">${l.type}</span><span class="bdg a">DA ${l.da||'?'}</span></div>
+      <div style="font-size:11px;color:var(--tx2)"><strong>Why:</strong> ${l.reason}</div>
+      <div style="font-size:11px;color:var(--tx2);margin-top:2px"><strong>How:</strong> ${l.how||'Contact their team'}</div></div></div>`).join(''));
+}
+
+function buildBacklinks(ai){
+  const b=ai.backlinks||{};
+  document.getElementById('tp-backlinks').innerHTML=`
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px">
+    ${[['Backlinks',(b.estimated||0).toLocaleString(),'ti-link'],['Domain Auth.',b.da||0,'ti-award'],['Page Auth.',b.pa||0,'ti-file-star'],['Toxic Risk',b.toxic||'Low','ti-biohazard']].map(([l,v,i])=>`
+    <div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:12px;text-align:center">
+      <i class="ti ${i}" style="font-size:18px;color:var(--acc);display:block;margin-bottom:4px"></i>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">${l}</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:${l==='Toxic Risk'?(v==='High'?'#f87171':v==='Medium'?'#fbbf24':'#34d399'):'var(--tx)'}">${v}</div>
+    </div>`).join('')}
+  </div>`+
+  card('ti-chart-pie','Backlink Profile','',`
+    ${row('ti-link','Dofollow',`<div class="mv" style="font-family:'DM Mono',monospace">${b.dofollow||'~60%'}</div>`)}
+    ${row('ti-link-off','Nofollow',`<div class="mv" style="font-family:'DM Mono',monospace">${b.nofollow||'~40%'}</div>`)}
+    ${row('ti-virus','Toxic risk',`<div class="mv"><span class="bdg ${b.toxic==='High'?'r':b.toxic==='Medium'?'a':'g'}">${b.toxic||'Low'}</span></div>`)}
+    <div class="aib">${b.analysis||'—'}</div>`)+
+  ((b.topRefs||[]).length?card('ti-stars','Top Referring Domains','',
+    (b.topRefs||[]).map(r=>`<div class="blr"><div class="bld">${r.domain}</div>
+    <span style="font-family:'DM Serif Display',serif;font-size:17px;color:${col(r.da||50)};min-width:25px;text-align:center">${r.da||'?'}</span>
+    <span class="bdg b" style="font-size:10px">DA</span>
+    <span class="bdg ${r.type==='Dofollow'?'g':'a'}">${r.type||'?'}</span>
+    <span class="bdg ${r.quality==='High'?'g':r.quality==='Medium'?'a':'r'}">${r.quality||'?'}</span></div>`).join('')):'')
+  +card('ti-hammer','Link Building Strategy','',`<div class="aib">${b.strategy||'—'}</div>`);
+}
+
+function buildCompetitor(ai){
+  const c=ai.competitor||{};
+  document.getElementById('tp-competitor').innerHTML=
+    card('ti-tournament','Competitive Strategy','',`
+      <div style="margin-bottom:10px"><div style="font-size:10px;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">Identified competitors</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${(c.rivals||[]).map(d=>`<span class="bdg b"><i class="ti ti-world"></i> ${d}</span>`).join('')}</div></div>
+      <div class="aib">${c.strategy||'—'}</div>`)+`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">`+
+    card('ti-wall','Ranking Barriers','',
+      (c.barriers||[]).map(b=>`<div class="si"><div class="sd hi"><i class="ti ti-barrier-block"></i></div><div class="sd2">${b}</div></div>`).join(''))+
+    card('ti-bolt','Quick Wins','',
+      (c.quickWins||[]).map(w=>`<div class="si"><div class="sd lo"><i class="ti ti-rocket"></i></div><div class="sd2">${w}</div></div>`).join(''))+
+  `</div>`+
+    card('ti-pencil','Content Angles to Outrank','',
+      (c.angles||[]).map((a,i)=>`<div class="mr"><div style="width:22px;height:22px;background:var(--bg4);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--acc);flex-shrink:0">${i+1}</div><div style="font-size:12px;color:var(--tx2);flex:1">${a}</div></div>`).join(''));
+}
+
+function buildFixes(ai){
+  const fixes=ai.fixes||[];
+  document.getElementById('tp-fixes').innerHTML=
+    card('ti-list-check','Priority SEO Fixes — Step by Step','',`
+      <p style="font-size:11px;color:var(--tx3);margin-bottom:10px">Implement in order. High priority fixes can move rankings within days.</p>`+
+      fixes.map((f,i)=>`<div class="si">
+        <div style="width:28px;height:28px;border-radius:7px;background:${f.priority==='High'?'rgba(239,68,68,.15)':f.priority==='Medium'?'rgba(245,158,11,.15)':'rgba(16,185,129,.15)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:600;color:${f.priority==='High'?'#f87171':f.priority==='Medium'?'#fbbf24':'#34d399'}">${i+1}</div>
+        <div style="flex:1">
+          <div class="st">${f.title} ${ib(f.priority,{High:'r',Medium:'a',Low:'g'})} ${f.effort?ib(f.effort,{Easy:'g',Medium:'a',Hard:'r'}):''} ${f.time?`<span class="bdg b">${f.time}</span>`:''}</div>
+          <div class="sd2" style="margin-bottom:4px"><strong>Impact:</strong> ${f.impact}</div>
+          <ol class="ssteps">${(f.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol>
+        </div></div>`).join(''));
+}
+
+document.getElementById('urlIn').addEventListener('keydown',e=>{if(e.key==='Enter')run()});
+</script>
+</body>
+</html>
