@@ -16,74 +16,75 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0a0d12;--bg2:#10141c;--bg3:#151b27;--bg4:#1c2335;
   --bdr:#ffffff12;--bdr2:#ffffff20;
-  --tx:#f0f2f7;--tx2:#8b94a8;--tx3:#515c72;
+  --tx:#ffffff;--tx2:#d1d6e3;--tx3:#9aa3b8;
   --acc:#3b82f6;--acc2:#1d4ed8;
   --grn:#10b981;--amb:#f59e0b;--red:#ef4444;--org:#f97316;
 }
-html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;overflow-x:hidden}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--tx);font-size:18px;line-height:1.6;overflow-x:hidden}
 body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 
 #setup{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center}
 #setup .logo{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;justify-content:center}
 #setup .lm{width:44px;height:44px;background:var(--acc);border-radius:11px;display:flex;align-items:center;justify-content:center}
-#setup .lm i{font-size:24px;color:#fff}
-#setup .sub{font-size:13px;color:var(--tx2);margin-bottom:1.75rem;max-width:340px;line-height:1.6}
+#setup .lm i{font-size:27px;color:#fff}
+#setup .sub{font-size:16px;color:var(--tx2);margin-bottom:1.75rem;max-width:340px;line-height:1.6}
 .setup-card{background:var(--bg3);border:1px solid var(--bdr2);border-radius:16px;padding:1.5rem;width:100%;max-width:420px;text-align:left;margin-bottom:1rem}
-.setup-card h3{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.setup-card h3{font-size:17px;font-weight:600;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:7px}
 .setup-card h3 i{color:var(--acc)}
 .field{margin-bottom:12px}
-.field label{display:block;font-size:12px;color:var(--tx2);margin-bottom:5px}
-.field input{width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:9px;padding:11px 13px;font-size:13px;color:var(--tx);font-family:'Outfit',sans-serif;outline:none}
+.field label{display:block;font-size:15px;color:var(--tx2);margin-bottom:5px}
+.field input{width:100%;background:var(--bg4);border:1px solid var(--bdr2);border-radius:9px;padding:11px 13px;font-size:16px;color:var(--tx);font-family:'Outfit',sans-serif;outline:none}
 .field input:focus{border-color:var(--acc)}
 .field input::placeholder{color:var(--tx3)}
-.save-btn{width:100%;background:var(--acc);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn{width:100%;background:var(--acc);color:#fff;border:none;border-radius:10px;padding:13px;font-size:18px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .save-btn:hover{background:var(--acc2)}
-.setup-note{font-size:12px;color:var(--tx3);text-align:center;max-width:380px;line-height:1.7}
+.setup-note{font-size:15px;color:var(--tx3);text-align:center;max-width:380px;line-height:1.7}
 .setup-note a{color:var(--acc);text-decoration:none}
-.skip-btn{background:none;border:none;color:var(--tx3);font-size:12px;margin-top:10px;cursor:pointer;text-decoration:underline}
+.skip-btn{background:none;border:none;color:var(--tx3);font-size:15px;margin-top:10px;cursor:pointer;text-decoration:underline}
 
 #app{display:none;min-height:100vh}
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 .header{padding:20px 0 0;display:flex;align-items:center;gap:10px;max-width:1000px;margin:0 auto;padding-left:24px;padding-right:24px}
 .logo-m{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-m i{font-size:18px;color:#fff}
-.logo-n{font-family:'DM Serif Display',serif;font-size:19px;letter-spacing:-.3px}
+.logo-m i{font-size:21px;color:#fff}
+.logo-n{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-.3px}
 .logo-n .f{color:#60a5fa}.logo-n .p{color:var(--amb)}
-.mode-pil{margin-left:auto;font-size:11px;background:var(--bg4);border:1px solid var(--bdr2);color:var(--tx2);padding:3px 10px;border-radius:20px;font-family:'DM Mono',monospace;white-space:nowrap}
-.settings-btn{background:none;border:none;color:var(--tx3);font-size:20px;cursor:pointer;padding:4px;flex-shrink:0}
+.mode-pil{margin-left:auto;font-size:15px;background:var(--bg4);border:1px solid var(--bdr2);color:var(--tx2);padding:3px 10px;border-radius:20px;font-family:'DM Mono',monospace;white-space:nowrap}
+.settings-btn{background:none;border:none;color:var(--tx3);font-size:23px;cursor:pointer;padding:4px;flex-shrink:0}
 
 .hero{text-align:center;padding:48px 24px 28px;max-width:760px;margin:0 auto}
-.htag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--acc);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:5px 14px;margin-bottom:20px;font-family:'DM Mono',monospace}
-.hero h1{font-family:'DM Serif Display',serif;font-size:38px;line-height:1.18;margin-bottom:16px;letter-spacing:-.7px}
+.htag{display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:500;color:var(--acc);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:5px 14px;margin-bottom:20px;font-family:'DM Mono',monospace}
+.hero h1{font-family:'DM Serif Display',serif;font-size:41px;line-height:1.18;margin-bottom:16px;letter-spacing:-.7px}
 .hero h1 em{color:#60a5fa;font-style:italic}
-.hero p{font-size:14px;color:var(--tx2);max-width:520px;margin:0 auto 28px;font-weight:300;line-height:1.6}
+.hero p{font-size:17px;color:var(--tx2);max-width:520px;margin:0 auto 28px;font-weight:300;line-height:1.6}
 
 .sbox-wrap{max-width:560px;margin:0 auto;padding:0 24px}
 .sbox{display:flex;gap:0;background:var(--bg3);border:1px solid var(--bdr2);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3)}
 .sbox:focus-within{border-color:var(--acc)}
-.sbox input{flex:1;background:transparent;border:none;outline:none;padding:14px 16px;font-size:15px;color:var(--tx);font-family:'Outfit',sans-serif;min-width:0}
+.sbox input{flex:1;background:transparent;border:none;outline:none;padding:14px 16px;font-size:18px;color:var(--tx);font-family:'Outfit',sans-serif;min-width:0}
 .sbox input::placeholder{color:var(--tx3)}
-.abtn{background:var(--acc);border:none;color:#fff;padding:12px 20px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
+.abtn{background:var(--acc);border:none;color:#fff;padding:12px 20px;font-size:17px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
 .abtn:hover{background:var(--acc2)}
 .abtn:disabled{background:var(--bg4);color:var(--tx3);cursor:not-allowed}
 
-.hints{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin:16px 24px 0;font-size:12px;color:var(--tx3)}
+.hints{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin:16px 24px 0;font-size:15px;color:var(--tx3)}
 .hints span{display:flex;align-items:center;gap:5px}
 
-.status{text-align:center;padding:10px 16px;font-size:13px;color:var(--tx2);min-height:40px;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
+.status{text-align:center;padding:10px 16px;font-size:16px;color:var(--tx2);min-height:40px;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}
 .status.err{color:var(--red)}
 
 .prog-wrap{margin:8px 16px}
 .prog{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px}
-.prog-item{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12px;color:var(--tx3)}
+.prog-item{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:15px;color:var(--tx3)}
 .prog-item.done{color:var(--tx)}
 .prog-item.active{color:var(--acc);font-weight:500}
-.pdot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:600}
+.pdot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:600}
 .pdot.done{background:rgba(16,185,129,.2);color:#34d399}
 .pdot.active{background:rgba(59,130,246,.2);color:#60a5fa}
 .pdot.wait{background:var(--bdr2);color:var(--tx3)}
@@ -94,41 +95,45 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 .rw{position:relative;width:90px;height:90px;flex-shrink:0}
 .rw svg{transform:rotate(-90deg)}
 .rn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.rn .b{font-family:'DM Serif Display',serif;font-size:28px;line-height:1}
-.rn .s{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:2px}
-.smeta h3{font-size:15px;font-weight:600;margin-bottom:4px}
-.smeta p{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
-.gpill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:6px}
+.rn .b{font-family:'DM Serif Display',serif;font-size:31px;line-height:1}
+.rn .s{font-size:14px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:2px}
+.smeta h3{font-size:18px;font-weight:600;margin-bottom:4px}
+.smeta p{font-size:15px;color:var(--tx2);line-height:1.5;margin-bottom:7px}
+.export-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.export-btn{flex:1;background:var(--bg3);border:1px solid var(--bdr2);color:var(--tx);padding:11px 16px;border-radius:11px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;min-width:140px}
+.export-btn:hover{border-color:var(--acc);background:var(--bg4)}
+.export-btn i{font-size:17px;color:var(--acc)}
+.gpill{display:inline-flex;align-items:center;gap:5px;font-size:15px;font-weight:600;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:6px}
 
 .mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .mc{background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:11px 9px;text-align:center}
-.mcl{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
-.mcs{font-family:'DM Serif Display',serif;font-size:22px;line-height:1}
+.mcl{font-size:14px;color:var(--tx3);font-family:'DM Mono',monospace;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.mcs{font-family:'DM Serif Display',serif;font-size:25px;line-height:1}
 .mcb{height:3px;background:var(--bdr2);border-radius:2px;margin-top:6px;overflow:hidden}
 .mcf{height:100%;border-radius:2px}
 
 .tabs{display:flex;gap:2px;background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:3px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
-.tb{background:none;border:none;color:var(--tx3);padding:7px 11px;font-size:12px;font-weight:500;cursor:pointer;border-radius:8px;white-space:nowrap;display:flex;align-items:center;gap:4px;font-family:'Outfit',sans-serif;transition:all .12s;flex-shrink:0}
+.tb{background:none;border:none;color:var(--tx3);padding:7px 11px;font-size:15px;font-weight:500;cursor:pointer;border-radius:8px;white-space:nowrap;display:flex;align-items:center;gap:4px;font-family:'Outfit',sans-serif;transition:all .12s;flex-shrink:0}
 .tb.on{background:var(--bg4);color:var(--tx);border:1px solid var(--bdr2)}
 .tb:hover:not(.on){color:var(--tx2)}
 .tp{display:none}.tp.on{display:block}
 
 .card{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:16px 15px;margin-bottom:10px}
 .ch{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.ch i{font-size:17px;color:var(--acc)}
-.ch h4{font-size:13px;font-weight:600;flex:1}
+.ch i{font-size:20px;color:var(--acc)}
+.ch h4{font-size:16px;font-weight:600;flex:1}
 .mr{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
 .mr:last-child{border-bottom:none;padding-bottom:0}
-.ml{font-size:11px;color:var(--tx2);flex:0 0 155px;display:flex;align-items:center;gap:5px}
-.ml i{font-size:13px;color:var(--tx3)}
-.mv{font-size:11px;color:var(--tx);font-weight:500;flex-shrink:0}
+.ml{font-size:15px;color:var(--tx2);flex:0 0 155px;display:flex;align-items:center;gap:5px}
+.ml i{font-size:16px;color:var(--tx3)}
+.mv{font-size:15px;color:var(--tx);font-weight:500;flex-shrink:0}
 .mm{flex:1;min-width:50px}
 .mb{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
 .mf{height:100%;border-radius:3px;transition:width .7s ease}
-.mp{font-size:10px;text-align:right;margin-bottom:2px}
+.mp{font-size:14px;text-align:right;margin-bottom:2px}
 
-.bdg{display:inline-flex;align-items:center;font-size:10px;font-weight:600;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;border:1px solid}
+.bdg{display:inline-flex;align-items:center;font-size:14px;font-weight:600;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;border:1px solid}
 .g{background:rgba(16,185,129,.15);color:#34d399;border-color:rgba(16,185,129,.3)}
 .a{background:rgba(245,158,11,.15);color:#fbbf24;border-color:rgba(245,158,11,.3)}
 .r{background:rgba(239,68,68,.15);color:#f87171;border-color:rgba(239,68,68,.3)}
@@ -136,22 +141,22 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 
 .si{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bdr);align-items:flex-start}
 .si:last-child{border-bottom:none}
-.sd{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.sd{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
 .hi{background:rgba(239,68,68,.15);color:#f87171}.md{background:rgba(245,158,11,.15);color:#fbbf24}.lo{background:rgba(16,185,129,.15);color:#34d399}
-.st{font-size:12px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.sd2{font-size:12px;color:var(--tx2);line-height:1.5}
+.st{font-size:15px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sd2{font-size:15px;color:var(--tx2);line-height:1.5}
 .ssteps{padding-left:14px;margin-top:5px}
-.ssteps li{font-size:11px;color:var(--tx3);line-height:1.85;font-family:'DM Mono',monospace}
+.ssteps li{font-size:15px;color:var(--tx3);line-height:1.85;font-family:'DM Mono',monospace}
 
-.aib{background:var(--bg4);border-left:3px solid var(--acc);border-radius:0 9px 9px 0;padding:10px 12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-top:9px}
+.aib{background:var(--bg4);border-left:3px solid var(--acc);border-radius:0 9px 9px 0;padding:10px 12px;font-size:15px;color:var(--tx2);line-height:1.6;margin-top:9px}
 
 .kww{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.kwt{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
-.kwt th{text-align:left;font-size:10px;color:var(--tx3);padding:6px 7px;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:.3px}
+.kwt{width:100%;border-collapse:collapse;font-size:15px;min-width:480px}
+.kwt th{text-align:left;font-size:14px;color:var(--tx3);padding:6px 7px;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:.3px}
 .kwt td{padding:7px 7px;border-bottom:1px solid var(--bdr)}
 .kwt tr:last-child td{border-bottom:none}
 
-.blr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:11px}
+.blr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:15px}
 .blr:last-child{border-bottom:none}
 .bld{color:var(--acc);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'DM Mono',monospace}
 
@@ -159,20 +164,20 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 .ext-r:last-child{border-bottom:none}
 
 .pl{text-align:center;padding:3rem 1.5rem}
-.pl i{font-size:52px;color:var(--bdr2);display:block;margin-bottom:1rem}
-.pl h3{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
-.pl p{font-size:13px;color:var(--tx2);max-width:340px;margin:0 auto;line-height:1.6}
+.pl i{font-size:55px;color:var(--bdr2);display:block;margin-bottom:1rem}
+.pl h3{font-family:'DM Serif Display',serif;font-size:25px;margin-bottom:8px}
+.pl p{font-size:16px;color:var(--tx2);max-width:340px;margin:0 auto;line-height:1.6}
 
 .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--bdr2);border-top-color:var(--acc);border-radius:50%;animation:rot .7s linear infinite;vertical-align:middle}
 @keyframes rot{to{transform:rotate(360deg)}}
 
-.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:10px 13px;font-size:12px;color:#fbbf24;display:flex;gap:8px;align-items:flex-start;margin-bottom:12px}
-.warn i{flex-shrink:0;font-size:15px;margin-top:1px}
+.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:10px 13px;font-size:15px;color:#fbbf24;display:flex;gap:8px;align-items:flex-start;margin-bottom:12px}
+.warn i{flex-shrink:0;font-size:18px;margin-top:1px}
 
 /* ── DESKTOP / TABLET SCALE-UP ── */
 @media(min-width:640px){
-  .hero h1{font-size:44px}
-  .hero p{font-size:15px}
+  .hero h1{font-size:47px}
+  .hero p{font-size:18px}
   .mg{grid-template-columns:repeat(6,1fr);gap:10px}
   .sbanner{padding:24px 26px}
   .card{padding:20px 22px}
@@ -180,26 +185,26 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 @media(min-width:860px){
   .header{padding-top:24px}
   .hero{padding:60px 24px 32px}
-  .hero h1{font-size:48px}
+  .hero h1{font-size:51px}
 }
 
 /* ── MOBILE REFINEMENT ── */
 @media(max-width:480px){
   .header{padding-left:16px;padding-right:16px}
   .hero{padding:36px 16px 22px}
-  .hero h1{font-size:28px}
-  .hero p{font-size:13px;max-width:320px}
+  .hero h1{font-size:31px}
+  .hero p{font-size:16px;max-width:320px}
   .sbox-wrap{padding:0 16px}
-  .hints{margin:14px 16px 0;gap:12px;font-size:11px}
+  .hints{margin:14px 16px 0;gap:12px;font-size:15px}
   .results{padding:0 16px 80px}
   .mg{grid-template-columns:repeat(3,1fr);gap:7px}
   .mc{padding:10px 7px}
-  .mcs{font-size:19px}
+  .mcs{font-size:22px}
   .sbanner{flex-direction:column;text-align:center;padding:18px 16px}
   .smeta p{max-width:280px;margin:0 auto 7px}
 }
 @media(max-width:360px){
-  .hero h1{font-size:25px}
+  .hero h1{font-size:28px}
   .abtn span{display:none}
 }
 </style>
@@ -209,7 +214,7 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 <div id="setup">
   <div class="logo">
     <div class="lm"><i class="ti ti-chart-arrows-vertical"></i></div>
-    <span style="font-family:'DM Serif Display',serif;font-size:24px"><span style="color:#60a5fa">FDS</span> Seo<span style="color:#f59e0b">Pro</span></span>
+    <span style="font-family:'DM Serif Display',serif;font-size:27px"><span style="color:#60a5fa">FDS</span> Seo<span style="color:#f59e0b">Pro</span></span>
   </div>
   <div class="sub">Powered by Groq AI (free & fast). Paste your free Groq API key below — it's stored only in your browser and sent securely to this app's own backend.</div>
   <div class="setup-card">
@@ -229,7 +234,7 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
 <div id="app">
   <div class="header">
     <div class="logo-m"><i class="ti ti-chart-arrows-vertical"></i></div>
-    <span class="logo-n"><span class="f">FDS</span> Seo<span class="p">Pro</span> <span style="font-weight:300;color:var(--tx2);font-size:15px">Analyzer</span></span>
+    <span class="logo-n"><span class="f">FDS</span> Seo<span class="p">Pro</span> <span style="font-weight:300;color:var(--tx2);font-size:18px">Analyzer</span></span>
     <div class="mode-pil" id="modePil">Groq AI</div>
     <button class="settings-btn" onclick="triggerInstall()" title="Install App"><i class="ti ti-download"></i></button>
     <button class="settings-btn" onclick="showSetup()" title="Settings"><i class="ti ti-settings"></i></button>
@@ -282,6 +287,10 @@ body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-i
         <p id="scoreSummary"></p>
         <div id="scoreGrade"></div>
       </div>
+    </div>
+    <div class="export-row">
+      <button class="export-btn" onclick="downloadPdf()"><i class="ti ti-file-type-pdf"></i> Download PDF</button>
+      <button class="export-btn" onclick="emailReport()"><i class="ti ti-mail"></i> Email Report</button>
     </div>
     <div class="mg" id="miniGrid"></div>
     <div class="tabs">
@@ -364,7 +373,7 @@ function host(url){try{return new URL(url).hostname}catch(e){return url}}
 function setStep(n){
   for(let i=1;i<=7;i++){
     const pi=document.getElementById('p'+i),pd=document.getElementById('pd'+i);
-    if(i<n){pi.className='prog-item done';pd.className='pdot done';pd.innerHTML='<i class="ti ti-check" style="font-size:10px"></i>'}
+    if(i<n){pi.className='prog-item done';pd.className='pdot done';pd.innerHTML='<i class="ti ti-check" style="font-size:14px"></i>'}
     else if(i===n){pi.className='prog-item active';pd.className='pdot active';pd.innerHTML='<span class="spin"></span>'}
     else{pi.className='prog-item';pd.className='pdot wait';pd.innerHTML=i}
   }
@@ -395,6 +404,9 @@ async function fetchAnalysis(url, psDesktop, psMobile){
 }
 
 let lastUrl = '';
+let lastAi = null;
+let lastOverall = 0;
+let lastGrade = '';
 
 async function run(){
   let url = document.getElementById('urlIn').value.trim();
@@ -424,6 +436,7 @@ async function run(){
 
     setStep(7);
     const ai = result.data;
+    lastAi = ai;
     document.getElementById('modePil').innerHTML = hasPS
       ? '<span style="color:#34d399">✓ PageSpeed + Groq AI</span>'
       : '<span style="color:#fbbf24">⚡ Groq AI Mode</span>';
@@ -432,7 +445,7 @@ async function run(){
       document.getElementById('p'+i).className='prog-item done';
       const pd=document.getElementById('pd'+i);
       pd.className='pdot done';
-      pd.innerHTML='<i class="ti ti-check" style="font-size:10px"></i>';
+      pd.innerHTML='<i class="ti ti-check" style="font-size:14px"></i>';
     }
 
     setTimeout(()=>{
@@ -461,6 +474,8 @@ function render(url, ai, hasPS){
   document.getElementById('scoreTitle').textContent = 'SEO Score — '+host(url);
   document.getElementById('scoreSummary').textContent = ai.summary||'';
   const g=overall>=80?'A':overall>=60?'B':overall>=40?'C':'D';
+  lastOverall = overall;
+  lastGrade = g;
   const gc={A:'#10b981',B:'#f59e0b',C:'#f97316',D:'#ef4444'}[g];
   const gl={A:'Grade A — Strong',B:'Grade B — Average',C:'Grade C — Weak',D:'Grade D — Critical'};
   document.getElementById('scoreGrade').innerHTML=`<span class="gpill" style="background:${gc}18;color:${gc};border:1px solid ${gc}55"><i class="ti ti-award"></i> ${gl[g]}</span>`;
@@ -468,7 +483,7 @@ function render(url, ai, hasPS){
     `<div class="warn"><i class="ti ti-info-circle"></i><div><strong>AI Mode</strong> — PageSpeed unavailable. Scores estimated by Groq AI. Retry in a few minutes for real Core Web Vitals.</div></div>`;
 
   const mCards=[['On-Page',s.onPage||50,'ti-file-text'],['Technical',s.technical||50,'ti-cpu'],['Content',s.content||50,'ti-align-left'],['UX',s.ux||50,'ti-device-desktop'],['Mobile',s.mobile||50,'ti-device-mobile'],['Security',s.security||50,'ti-shield-check']];
-  document.getElementById('miniGrid').innerHTML=mCards.map(([l,v,i])=>`<div class="mc"><div style="font-size:15px;margin-bottom:2px"><i class="ti ${i}" style="color:${col(v)}"></i></div><div class="mcl">${l}</div><div class="mcs" style="color:${col(v)}">${v}</div><div class="mcb"><div class="mcf" style="width:${v}%;background:${col(v)}"></div></div></div>`).join('');
+  document.getElementById('miniGrid').innerHTML=mCards.map(([l,v,i])=>`<div class="mc"><div style="font-size:18px;margin-bottom:2px"><i class="ti ${i}" style="color:${col(v)}"></i></div><div class="mcl">${l}</div><div class="mcs" style="color:${col(v)}">${v}</div><div class="mcb"><div class="mcf" style="width:${v}%;background:${col(v)}"></div></div></div>`).join('');
 
   buildOnPage(url,ai);buildTechnical(ai);buildContent(ai);
   buildKeywords(ai);buildBacklinks(ai);buildCompetitor(ai);buildFixes(ai);
@@ -481,31 +496,31 @@ function buildOnPage(url,ai){
   const t=ai.title||{},m=ai.meta||{},h=ai.headings||{};
   document.getElementById('tp-onpage').innerHTML=
     card('ti-cursor-text','SEO Title',bdg(t.score||50),`
-      ${row('ti-quote','Likely title',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:11px">${t.value||'—'}</div>`)}
+      ${row('ti-quote','Likely title',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:15px">${t.value||'—'}</div>`)}
       ${row('ti-chart-bar','Score',meter(t.score||50))}
       ${row('ti-ruler','Length',`<div class="mv">${t.length||'?'}</div>`)}
       ${row('ti-tag','Keyword in title',`<div class="mv">${t.kwInTitle?'<span class="bdg g">Yes</span>':'<span class="bdg r">No</span>'}</div>`)}
       <div class="aib">${t.comment||'—'}</div>
       <div style="margin-top:9px;padding:9px 11px;background:var(--bg4);border:1px solid rgba(59,130,246,.3);border-radius:8px">
-        <div style="font-size:10px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved title</div>
-        <div style="font-size:12px;font-weight:600;color:#60a5fa">${t.improved||'—'}</div>
+        <div style="font-size:14px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved title</div>
+        <div style="font-size:15px;font-weight:600;color:#60a5fa">${t.improved||'—'}</div>
       </div>`)+
     card('ti-text-caption','Meta Description',bdg(m.score||50),`
-      ${row('ti-quote','Likely meta',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:11px">${m.value||'—'}</div>`)}
+      ${row('ti-quote','Likely meta',`<div class="mv" style="max-width:240px;color:#60a5fa;font-size:15px">${m.value||'—'}</div>`)}
       ${row('ti-chart-bar','Score',meter(m.score||50))}
       ${row('ti-ruler','Length',`<div class="mv">${m.length||'?'}</div>`)}
       ${row('ti-tag','Keyword in meta',`<div class="mv">${m.kwInMeta?'<span class="bdg g">Yes</span>':'<span class="bdg r">No</span>'}</div>`)}
       <div class="aib">${m.comment||'—'}</div>
       <div style="margin-top:9px;padding:9px 11px;background:var(--bg4);border:1px solid rgba(59,130,246,.3);border-radius:8px">
-        <div style="font-size:10px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved meta</div>
-        <div style="font-size:12px;font-weight:600;color:#60a5fa">${m.improved||'—'}</div>
+        <div style="font-size:14px;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px">Suggested improved meta</div>
+        <div style="font-size:15px;font-weight:600;color:#60a5fa">${m.improved||'—'}</div>
       </div>`)+
     card('ti-list','Headings H1–H6',bdg(h.score||50),`
-      ${row('ti-h-1','H1 likely',`<div class="mv" style="max-width:220px;font-size:11px">${h.h1Value||'—'}</div>`)}
+      ${row('ti-h-1','H1 likely',`<div class="mv" style="max-width:220px;font-size:15px">${h.h1Value||'—'}</div>`)}
       ${row('ti-chart-bar','Score',meter(h.score||50))}
-      ${row('ti-sitemap','Structure',`<div class="mv" style="font-size:11px;max-width:220px">${h.structure||'—'}</div>`)}
-      ${(h.issues||[]).map(i=>row('ti-alert-triangle',`<span style="color:#f87171">Issue</span>`,`<div class="mv" style="font-size:11px;color:#f87171">${i}</div>`)).join('')}
-      ${(h.fixes||[]).map(f=>row('ti-circle-check',`<span style="color:#34d399">Fix</span>`,`<div class="mv" style="font-size:11px;color:#34d399">${f}</div>`)).join('')}`)+
+      ${row('ti-sitemap','Structure',`<div class="mv" style="font-size:15px;max-width:220px">${h.structure||'—'}</div>`)}
+      ${(h.issues||[]).map(i=>row('ti-alert-triangle',`<span style="color:#f87171">Issue</span>`,`<div class="mv" style="font-size:15px;color:#f87171">${i}</div>`)).join('')}
+      ${(h.fixes||[]).map(f=>row('ti-circle-check',`<span style="color:#34d399">Fix</span>`,`<div class="mv" style="font-size:15px;color:#34d399">${f}</div>`)).join('')}`)+
     card('ti-settings','Technical On-Page Tags','',`
       ${row('ti-shield-lock','HTTPS',`<div class="mv">${url.startsWith('https')?'<span class="bdg g">Secure ✓</span>':'<span class="bdg r">Not secure ✗</span>'}</div>`)}
       ${row('ti-robot','Robots.txt',`<div class="mv"><span class="bdg b">See technical tab</span></div>`)}
@@ -539,12 +554,12 @@ function buildContent(ai){
       ${row('ti-medal','E-E-A-T score',meter(c.eeat||50))}
       ${row('ti-layers','Content depth',meter(c.depth||50))}
       <div class="aib">${c.comment||'—'}</div>
-      ${(c.gaps||[]).length?`<div style="margin-top:9px"><div style="font-size:10px;color:var(--tx3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px">Content gaps to fill</div>
-      ${(c.gaps||[]).map(g=>`<div style="display:flex;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--tx2)"><i class="ti ti-point-filled" style="color:#f59e0b;font-size:10px"></i>${g}</div>`).join('')}</div>`:''}`)+
+      ${(c.gaps||[]).length?`<div style="margin-top:9px"><div style="font-size:14px;color:var(--tx3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px">Content gaps to fill</div>
+      ${(c.gaps||[]).map(g=>`<div style="display:flex;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);font-size:15px;color:var(--tx2)"><i class="ti ti-point-filled" style="color:#f59e0b;font-size:14px"></i>${g}</div>`).join('')}</div>`:''}`)+
     (ri.length?card('ti-trending-down','Why Not Ranking Well','',
       ri.map(r=>`<div class="si"><div class="sd ${r.impact==='High'?'hi':r.impact==='Medium'?'md':'lo'}"><i class="ti ti-x"></i></div>
       <div><div class="st">${r.reason} ${ib(r.impact,{High:'r',Medium:'a',Low:'b'})}</div>
-      <div class="sd2" style="margin-bottom:2px"><span class="bdg b" style="font-size:10px">${r.signal||''}</span></div>
+      <div class="sd2" style="margin-bottom:2px"><span class="bdg b" style="font-size:14px">${r.signal||''}</span></div>
       <div class="sd2"><strong>Fix:</strong> ${r.fix}</div></div></div>`).join('')):'');
 }
 
@@ -563,14 +578,14 @@ function buildKeywords(ai){
       <td>${k.inH1?'<i class="ti ti-check" style="color:#34d399"></i>':'<i class="ti ti-x" style="color:#f87171"></i>'}</td>
       <td style="font-family:'DM Mono',monospace">${k.density||'—'}</td>
       <td>${ib(k.verdict,{Keep:'g',Improve:'a',Replace:'r'})}</td>
-    </tr><tr><td colspan="9" style="padding:2px 7px 8px;font-size:10px;color:var(--tx3);background:var(--bg4)">${k.reason}</td></tr>`).join('')}</tbody></table></div>`
-    :'<p style="font-size:12px;color:var(--tx2);text-align:center;padding:12px">No keywords found.</p>')+
+    </tr><tr><td colspan="9" style="padding:2px 7px 8px;font-size:14px;color:var(--tx3);background:var(--bg4)">${k.reason}</td></tr>`).join('')}</tbody></table></div>`
+    :'<p style="font-size:15px;color:var(--tx2);text-align:center;padding:12px">No keywords found.</p>')+
     card('ti-external-link','External Links to Acquire','',ext.map(l=>`<div class="ext-r">
-      <div style="width:28px;height:28px;background:var(--bg4);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-link" style="color:var(--acc);font-size:14px"></i></div>
-      <div style="flex:1"><div style="font-weight:600;font-size:11px;font-family:'DM Mono',monospace;color:var(--acc);margin-bottom:2px">${l.domain}</div>
+      <div style="width:28px;height:28px;background:var(--bg4);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-link" style="color:var(--acc);font-size:17px"></i></div>
+      <div style="flex:1"><div style="font-weight:600;font-size:15px;font-family:'DM Mono',monospace;color:var(--acc);margin-bottom:2px">${l.domain}</div>
       <div style="display:flex;gap:4px;margin-bottom:3px"><span class="bdg b">${l.type}</span><span class="bdg a">DA ${l.da||'?'}</span></div>
-      <div style="font-size:11px;color:var(--tx2)"><strong>Why:</strong> ${l.reason}</div>
-      <div style="font-size:11px;color:var(--tx2);margin-top:2px"><strong>How:</strong> ${l.how||'Contact their team'}</div></div></div>`).join(''));
+      <div style="font-size:15px;color:var(--tx2)"><strong>Why:</strong> ${l.reason}</div>
+      <div style="font-size:15px;color:var(--tx2);margin-top:2px"><strong>How:</strong> ${l.how||'Contact their team'}</div></div></div>`).join(''));
 }
 
 function buildBacklinks(ai){
@@ -579,9 +594,9 @@ function buildBacklinks(ai){
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px">
     ${[['Backlinks',(b.estimated||0).toLocaleString(),'ti-link'],['Domain Auth.',b.da||0,'ti-award'],['Page Auth.',b.pa||0,'ti-file-star'],['Toxic Risk',b.toxic||'Low','ti-biohazard']].map(([l,v,i])=>`
     <div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:12px;text-align:center">
-      <i class="ti ${i}" style="font-size:18px;color:var(--acc);display:block;margin-bottom:4px"></i>
-      <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">${l}</div>
-      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:${l==='Toxic Risk'?(v==='High'?'#f87171':v==='Medium'?'#fbbf24':'#34d399'):'var(--tx)'}">${v}</div>
+      <i class="ti ${i}" style="font-size:21px;color:var(--acc);display:block;margin-bottom:4px"></i>
+      <div style="font-size:14px;color:var(--tx3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px">${l}</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:23px;color:${l==='Toxic Risk'?(v==='High'?'#f87171':v==='Medium'?'#fbbf24':'#34d399'):'var(--tx)'}">${v}</div>
     </div>`).join('')}
   </div>`+
   card('ti-chart-pie','Backlink Profile','',`
@@ -591,8 +606,8 @@ function buildBacklinks(ai){
     <div class="aib">${b.analysis||'—'}</div>`)+
   ((b.topRefs||[]).length?card('ti-stars','Top Referring Domains','',
     (b.topRefs||[]).map(r=>`<div class="blr"><div class="bld">${r.domain}</div>
-    <span style="font-family:'DM Serif Display',serif;font-size:17px;color:${col(r.da||50)};min-width:25px;text-align:center">${r.da||'?'}</span>
-    <span class="bdg b" style="font-size:10px">DA</span>
+    <span style="font-family:'DM Serif Display',serif;font-size:20px;color:${col(r.da||50)};min-width:25px;text-align:center">${r.da||'?'}</span>
+    <span class="bdg b" style="font-size:14px">DA</span>
     <span class="bdg ${r.type==='Dofollow'?'g':'a'}">${r.type||'?'}</span>
     <span class="bdg ${r.quality==='High'?'g':r.quality==='Medium'?'a':'r'}">${r.quality||'?'}</span></div>`).join('')):'')
   +card('ti-hammer','Link Building Strategy','',`<div class="aib">${b.strategy||'—'}</div>`);
@@ -602,7 +617,7 @@ function buildCompetitor(ai){
   const c=ai.competitor||{};
   document.getElementById('tp-competitor').innerHTML=
     card('ti-tournament','Competitive Strategy','',`
-      <div style="margin-bottom:10px"><div style="font-size:10px;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">Identified competitors</div>
+      <div style="margin-bottom:10px"><div style="font-size:14px;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">Identified competitors</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px">${(c.rivals||[]).map(d=>`<span class="bdg b"><i class="ti ti-world"></i> ${d}</span>`).join('')}</div></div>
       <div class="aib">${c.strategy||'—'}</div>`)+`
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">`+
@@ -612,21 +627,254 @@ function buildCompetitor(ai){
       (c.quickWins||[]).map(w=>`<div class="si"><div class="sd lo"><i class="ti ti-rocket"></i></div><div class="sd2">${w}</div></div>`).join(''))+
   `</div>`+
     card('ti-pencil','Content Angles to Outrank','',
-      (c.angles||[]).map((a,i)=>`<div class="mr"><div style="width:22px;height:22px;background:var(--bg4);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--acc);flex-shrink:0">${i+1}</div><div style="font-size:12px;color:var(--tx2);flex:1">${a}</div></div>`).join(''));
+      (c.angles||[]).map((a,i)=>`<div class="mr"><div style="width:22px;height:22px;background:var(--bg4);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--acc);flex-shrink:0">${i+1}</div><div style="font-size:15px;color:var(--tx2);flex:1">${a}</div></div>`).join(''));
 }
 
 function buildFixes(ai){
   const fixes=ai.fixes||[];
   document.getElementById('tp-fixes').innerHTML=
     card('ti-list-check','Priority SEO Fixes — Step by Step','',`
-      <p style="font-size:11px;color:var(--tx3);margin-bottom:10px">Implement in order. High priority fixes can move rankings within days.</p>`+
+      <p style="font-size:15px;color:var(--tx3);margin-bottom:10px">Implement in order. High priority fixes can move rankings within days.</p>`+
       fixes.map((f,i)=>`<div class="si">
-        <div style="width:28px;height:28px;border-radius:7px;background:${f.priority==='High'?'rgba(239,68,68,.15)':f.priority==='Medium'?'rgba(245,158,11,.15)':'rgba(16,185,129,.15)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:600;color:${f.priority==='High'?'#f87171':f.priority==='Medium'?'#fbbf24':'#34d399'}">${i+1}</div>
+        <div style="width:28px;height:28px;border-radius:7px;background:${f.priority==='High'?'rgba(239,68,68,.15)':f.priority==='Medium'?'rgba(245,158,11,.15)':'rgba(16,185,129,.15)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;font-weight:600;color:${f.priority==='High'?'#f87171':f.priority==='Medium'?'#fbbf24':'#34d399'}">${i+1}</div>
         <div style="flex:1">
           <div class="st">${f.title} ${ib(f.priority,{High:'r',Medium:'a',Low:'g'})} ${f.effort?ib(f.effort,{Easy:'g',Medium:'a',Hard:'r'}):''} ${f.time?`<span class="bdg b">${f.time}</span>`:''}</div>
           <div class="sd2" style="margin-bottom:4px"><strong>Impact:</strong> ${f.impact}</div>
           <ol class="ssteps">${(f.steps||[]).map(s=>`<li>${s}</li>`).join('')}</ol>
         </div></div>`).join(''));
+}
+
+// ── EXPORT: PDF DOWNLOAD ──────────────────────────────────────────────────────
+function buildReportText(){
+  if(!lastAi) return null;
+  const ai = lastAi;
+  const s = ai.scores||{};
+  const lines = [];
+  const push = (t='') => lines.push(t);
+
+  push(`FDS SEOPRO ANALYZER — SEO AUDIT REPORT`);
+  push(`Site: ${lastUrl}`);
+  push(`Date: ${new Date().toLocaleString()}`);
+  push(`Overall Score: ${lastOverall}/100 (Grade ${lastGrade})`);
+  push('');
+  push('SUMMARY');
+  push(ai.summary || '—');
+  push('');
+  push('SCORES');
+  push(`On-Page: ${s.onPage||0}  Technical: ${s.technical||0}  Content: ${s.content||0}`);
+  push(`UX: ${s.ux||0}  Mobile: ${s.mobile||0}  Security: ${s.security||0}`);
+  push('');
+
+  if(ai.title){
+    push('SEO TITLE');
+    push(`Current: ${ai.title.value||'—'}`);
+    push(`Score: ${ai.title.score||0}/100  Rating: ${ai.title.rating||'—'}`);
+    push(`Comment: ${ai.title.comment||'—'}`);
+    push(`Suggested improved title: ${ai.title.improved||'—'}`);
+    push('');
+  }
+  if(ai.meta){
+    push('META DESCRIPTION');
+    push(`Current: ${ai.meta.value||'—'}`);
+    push(`Score: ${ai.meta.score||0}/100  Rating: ${ai.meta.rating||'—'}`);
+    push(`Comment: ${ai.meta.comment||'—'}`);
+    push(`Suggested improved meta: ${ai.meta.improved||'—'}`);
+    push('');
+  }
+  if(ai.headings){
+    push('HEADINGS');
+    push(`H1: ${ai.headings.h1Value||'—'}`);
+    push(`Structure: ${ai.headings.structure||'—'}`);
+    (ai.headings.issues||[]).forEach(i=>push(`Issue: ${i}`));
+    (ai.headings.fixes||[]).forEach(f=>push(`Fix: ${f}`));
+    push('');
+  }
+  if((ai.keywords||[]).length){
+    push('CURRENT KEYWORDS (detected on page)');
+    ai.keywords.forEach(k=>{
+      push(`- "${k.kw}" | Volume: ${k.volume||'?'} | Difficulty: ${k.difficulty||'?'} | Verdict: ${k.verdict||'?'}`);
+      push(`  ${k.reason||''}`);
+    });
+    push('');
+  }
+  if((ai.suggestedKeywords||[]).length){
+    push('SUGGESTED NEW KEYWORDS TO TARGET');
+    ai.suggestedKeywords.forEach(k=>{
+      push(`- "${k.kw}" | Volume: ${k.volume||'?'} | Difficulty: ${k.difficulty||'?'}`);
+      push(`  Why: ${k.reason||''}`);
+    });
+    push('');
+  }
+  if(ai.backlinks){
+    const b = ai.backlinks;
+    push('BACKLINK PROFILE');
+    push(`Estimated backlinks: ${b.estimated||0}  Domain Authority: ${b.da||0}  Toxic risk: ${b.toxic||'Low'}`);
+    push(`${b.analysis||''}`);
+    push(`Strategy: ${b.strategy||''}`);
+    push('');
+  }
+  if(ai.competitor){
+    const c = ai.competitor;
+    push('COMPETITOR ANALYSIS');
+    push(`Rivals: ${(c.rivals||[]).join(', ')}`);
+    push(`Strategy: ${c.strategy||''}`);
+    (c.quickWins||[]).forEach(w=>push(`Quick win: ${w}`));
+    push('');
+  }
+  if((ai.fixes||[]).length){
+    push('PRIORITY FIXES');
+    ai.fixes.forEach((f,i)=>{
+      push(`${i+1}. ${f.title} [${f.priority} priority, ${f.effort||'?'} effort, ${f.time||'?'}]`);
+      push(`   Impact: ${f.impact||''}`);
+      (f.steps||[]).forEach(st=>push(`   - ${st}`));
+    });
+  }
+
+  return lines.join('\n');
+}
+
+function downloadPdf(){
+  if(!lastAi){ alert('Run an analysis first.'); return; }
+  if(typeof window.jspdf === 'undefined'){ alert('PDF library failed to load. Check your internet connection and try again.'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 48;
+  const maxW = pageW - margin*2;
+  let y = margin;
+
+  function ensureSpace(h){
+    if(y + h > pageH - margin){ doc.addPage(); y = margin; }
+  }
+  function addHeading(text, size=14){
+    ensureSpace(size+12);
+    doc.setFont('helvetica','bold'); doc.setFontSize(size); doc.setTextColor(20,20,20);
+    doc.text(text, margin, y);
+    y += size + 8;
+  }
+  function addBody(text, size=10){
+    doc.setFont('helvetica','normal'); doc.setFontSize(size); doc.setTextColor(60,60,60);
+    const lines = doc.splitTextToSize(text || '—', maxW);
+    lines.forEach(line=>{
+      ensureSpace(size+4);
+      doc.text(line, margin, y);
+      y += size + 4;
+    });
+    y += 4;
+  }
+
+  // Cover
+  doc.setFont('helvetica','bold'); doc.setFontSize(22); doc.setTextColor(24,95,165);
+  doc.text('FDS SeoPro Analyzer', margin, y); y += 30;
+  doc.setFontSize(13); doc.setTextColor(20,20,20);
+  doc.text('SEO Audit Report', margin, y); y += 22;
+  doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(90,90,90);
+  doc.text(`Site: ${lastUrl}`, margin, y); y += 16;
+  doc.text(`Date: ${new Date().toLocaleString()}`, margin, y); y += 16;
+  doc.setFont('helvetica','bold'); doc.setFontSize(16);
+  const gradeColor = {A:[16,150,90],B:[200,140,10],C:[210,100,30],D:[200,50,50]}[lastGrade] || [80,80,80];
+  doc.setTextColor(...gradeColor);
+  doc.text(`Overall Score: ${lastOverall}/100  —  Grade ${lastGrade}`, margin, y); y += 28;
+
+  const ai = lastAi;
+  addHeading('Summary');
+  addBody(ai.summary);
+
+  const s = ai.scores || {};
+  addHeading('Category Scores');
+  addBody(`On-Page: ${s.onPage||0}/100   Technical: ${s.technical||0}/100   Content: ${s.content||0}/100`);
+  addBody(`UX: ${s.ux||0}/100   Mobile: ${s.mobile||0}/100   Security: ${s.security||0}/100`);
+
+  if(ai.title){
+    addHeading('SEO Title');
+    addBody(`Current title: ${ai.title.value||'—'}`);
+    addBody(`Score: ${ai.title.score||0}/100 — ${ai.title.rating||'—'}`);
+    addBody(ai.title.comment);
+    addBody(`Suggested: ${ai.title.improved||'—'}`);
+  }
+
+  if(ai.meta){
+    addHeading('Meta Description');
+    addBody(`Current meta: ${ai.meta.value||'—'}`);
+    addBody(`Score: ${ai.meta.score||0}/100 — ${ai.meta.rating||'—'}`);
+    addBody(ai.meta.comment);
+    addBody(`Suggested: ${ai.meta.improved||'—'}`);
+  }
+
+  if(ai.headings){
+    addHeading('Headings');
+    addBody(`H1: ${ai.headings.h1Value||'—'}`);
+    addBody(ai.headings.structure);
+    (ai.headings.issues||[]).forEach(i=>addBody(`Issue: ${i}`));
+    (ai.headings.fixes||[]).forEach(f=>addBody(`Fix: ${f}`));
+  }
+
+  if((ai.keywords||[]).length){
+    addHeading('Current Keywords (detected on page)');
+    ai.keywords.forEach(k=>{
+      addBody(`"${k.kw}" — Volume: ${k.volume||'?'}, Difficulty: ${k.difficulty||'?'}, Verdict: ${k.verdict||'?'}. ${k.reason||''}`);
+    });
+  }
+
+  if((ai.suggestedKeywords||[]).length){
+    addHeading('Suggested New Keywords to Target');
+    ai.suggestedKeywords.forEach(k=>{
+      addBody(`"${k.kw}" — Volume: ${k.volume||'?'}, Difficulty: ${k.difficulty||'?'}. Why: ${k.reason||''}`);
+    });
+  }
+
+  if(ai.backlinks){
+    const b = ai.backlinks;
+    addHeading('Backlink Profile');
+    addBody(`Estimated backlinks: ${b.estimated||0}   Domain Authority: ${b.da||0}   Toxic risk: ${b.toxic||'Low'}`);
+    addBody(b.analysis);
+    addBody(`Strategy: ${b.strategy||''}`);
+  }
+
+  if(ai.competitor){
+    const c = ai.competitor;
+    addHeading('Competitor Analysis');
+    addBody(`Rivals: ${(c.rivals||[]).join(', ')}`);
+    addBody(c.strategy);
+    (c.quickWins||[]).forEach(w=>addBody(`Quick win: ${w}`));
+  }
+
+  if((ai.fixes||[]).length){
+    addHeading('Priority Fixes');
+    ai.fixes.forEach((f,i)=>{
+      addBody(`${i+1}. ${f.title}  [${f.priority} priority, ${f.effort||'?'} effort, ${f.time||'?'} to results]`);
+      addBody(`Impact: ${f.impact||''}`);
+      (f.steps||[]).forEach(st=>addBody(`  • ${st}`));
+    });
+  }
+
+  const filename = `FDS-SeoPro-Report-${host(lastUrl)}-${new Date().toISOString().slice(0,10)}.pdf`;
+  doc.save(filename);
+}
+
+// ── EXPORT: EMAIL VIA GMAIL ───────────────────────────────────────────────────
+function emailReport(){
+  if(!lastAi){ alert('Run an analysis first.'); return; }
+  const ai = lastAi;
+  const subject = `SEO Report for ${host(lastUrl)} — Score ${lastOverall}/100`;
+
+  let body = `SEO Audit Report for ${lastUrl}\n`;
+  body += `Overall Score: ${lastOverall}/100 (Grade ${lastGrade})\n\n`;
+  body += `${ai.summary || ''}\n\n`;
+  if(ai.title) body += `SEO TITLE: ${ai.title.value || '—'}\nSuggested: ${ai.title.improved || '—'}\n\n`;
+  if(ai.meta) body += `META: ${ai.meta.value || '—'}\nSuggested: ${ai.meta.improved || '—'}\n\n`;
+  if((ai.fixes||[]).length){
+    body += `TOP PRIORITY FIXES:\n`;
+    ai.fixes.slice(0,5).forEach((f,i)=>{ body += `${i+1}. ${f.title} (${f.priority} priority)\n`; });
+    body += `\n`;
+  }
+  body += `For the full detailed report with keywords, backlinks, and competitor analysis, download the PDF from FDS SeoPro Analyzer and attach it to this email.\n`;
+  body += `\n— Generated by FDS SeoPro Analyzer`;
+
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(gmailUrl, '_blank');
 }
 
 document.getElementById('urlIn').addEventListener('keydown',e=>{if(e.key==='Enter')run()});
